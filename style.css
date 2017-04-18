@@ -25,3 +25,11 @@ body {
   min-width: 26px;
   width: 10%;
 }
+
+.turns {
+  width: 100%;
+}
+
+#player-turn {
+  display: none;
+}
