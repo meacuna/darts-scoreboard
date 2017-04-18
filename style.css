@@ -1,0 +1,27 @@
+/*
+Copyright (c) 2017, Martín Acuña Werner.
+This source code is subject to the terms of the Mozilla Public License.
+You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
+*/
+
+body {
+  background-color: #03573f;
+  font-family: 'Montserrat', sans-serif;
+  color: #FFFFFF;
+}
+
+.container {
+  margin-left: 10%;
+  text-align: center;
+  width: 80%;
+}
+
+.player-score {
+  display: inline-block;
+  width: 49%;
+}
+
+.player-score > input {
+  min-width: 26px;
+  width: 10%;
+}
