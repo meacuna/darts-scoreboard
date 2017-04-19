@@ -7,14 +7,20 @@ You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
 (function () {
 
   /*
-    Returns current nth throw
+    Returns current nth throw's score
     Input: 0, 1, 2
     Output: score of nth throw
   */
   function nthThrow(playerDiv, index) {
-    return parseInt(
-      $(playerDiv).find('input:nth-of-type(' + (index + 1) + ')').val()
-    ) || 0;
+    var score = $(playerDiv).find('input:nth-of-type(' + (index + 1) + ')').val() || '0';
+    switch (score.charAt(0).toUpperCase()) {
+      case 'D':
+        return 2 * parseInt(score.substring(1));
+      case 'T':
+        return 3 * parseInt(score.substring(1));
+      default:
+        return parseInt(score);
+    }
   }
 
   /*
