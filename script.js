@@ -24,12 +24,37 @@ You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
   }
 
   /*
+    Returns current nth throw's score
+    Input: 0, 1, 2
+    Output: true/false depending if throw was a double
+  */
+  function isThrowDouble(playerDiv, index) {
+    return $(playerDiv).find('input:nth-of-type(' + (index + 1) + ')')
+                       .val().charAt(0).toUpperCase() === 'D';
+  }
+
+  /*
     Calculates currents turn score of a given player
     Input: player's div element
     Output: total score on current turn
   */
   function currentTurnScore(playerDiv) {
     return nthThrow(playerDiv, 0) + nthThrow(playerDiv, 1) + nthThrow(playerDiv, 2);
+  }
+
+  /*
+    Checks if last throw was a double
+    Input: player's div element
+    Output: true or false, depending if last throw was a double or not
+  */
+  function finishedWithDouble(playerDiv) {
+    var first = nthThrow(playerDiv, 2) === 0 &&
+                nthThrow(playerDiv, 1) === 0 &&
+                isThrowDouble(playerDiv, 0);
+    var second = nthThrow(playerDiv, 2) === 0 &&
+                 isThrowDouble(playerDiv, 1);
+    var third = isThrowDouble(playerDiv, 2);
+    return first || second || third;
   }
 
   /*
@@ -43,10 +68,13 @@ You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
     var turnScore = currentTurnScore(playerDiv);
     if (remainingScore - turnScore > 1) {
       remainingScoreContainer.html(remainingScore - turnScore);
-      return true;
+      return 'accepted';
+    } else if (remainingScore - turnScore === 0 && finishedWithDouble(playerDiv)) {
+      remainingScoreContainer.html(remainingScore - turnScore);
+      return 'winner';
     }
 
-    return false;
+    return 'busted';
   }
 
   /*
@@ -54,7 +82,7 @@ You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
     Input: player's div element, validTurn
     Output: none
   */
-  function drawTurn(playerDiv, validTurn) {
+  function drawTurn(playerDiv, playerState) {
     var playerTurn = $('#player-turn').clone();
     playerTurn.attr('id', '');
     playerTurn.children('span').each(function (i, turnThrow) {
@@ -65,8 +93,13 @@ You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
       }
     });
 
-    if (!validTurn) {
-      playerTurn.css('color', 'red');
+    switch (playerState) {
+      case 'winner':
+        playerTurn.css('color', 'green');
+        break;
+      case 'busted':
+        playerTurn.css('color', 'red');
+        break;
     }
 
     $(playerDiv).find('.turns').append(playerTurn);
@@ -74,8 +107,8 @@ You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
 
   $('.save-btn').click(function () {
     var playerDiv = $(this).parent();
-    var validTurn = substractScore(playerDiv);
-    drawTurn(playerDiv, validTurn);
+    var playerState = substractScore(playerDiv);
+    drawTurn(playerDiv, playerState);
     playerDiv.find('input').val('');
   });
 }());
