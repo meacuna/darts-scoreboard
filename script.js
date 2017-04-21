@@ -110,5 +110,6 @@ You can obtain a copy of the MPLv2 at https://www.mozilla.org/MPL/2.0/.
     var playerState = substractScore(playerDiv);
     drawTurn(playerDiv, playerState);
     playerDiv.find('input').val('');
+    playerDiv.siblings('.player-score').find('input:first').focus();
   });
 }());
